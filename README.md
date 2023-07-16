@@ -15,4 +15,6 @@ Toggle between comment highlights and normal code view using tree-sitter grammar
     <b>Highlighted comments</b>
 </p>
 
-![Demo](./assets/demo_small.mp4)
+
+https://github.com/leon-richardt/comment-highlights.nvim/assets/35232120/89077efa-8005-4ee7-8924-6441053ef696
+
