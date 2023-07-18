@@ -16,7 +16,7 @@ Toggle between comment highlights and normal code view using tree-sitter grammar
   </tr>
 </table>
 
-In most color schemes, comment are intentionally kept subtle.
+In most color schemes, comments are intentionally kept subtle.
 This is desirable in the normal *modus operandi*, i.e., when working in a well-known codebase.
 When exploring or skimming, however, comments can provide a valuable shortcut to understanding unfamiliar code.
 This plugin aims to help you switch between those mental modes.
@@ -90,9 +90,9 @@ There are just a few options to configure, with the following defaults:
 </details>
 
 ## 🚀 Usage
-- `require(comment-highlights).enable()`: Enable comment highlighting for the current buffer
-- `require(comment-highlights).disable()`: Disable comment highlighting for the current buffer
-- `require(comment-highlights).toggle()`: Toggle comment highlighting for the current buffer
+- `require("comment-highlights").enable()`: Enable comment highlighting for the current buffer
+- `require("comment-highlights").disable()`: Disable comment highlighting for the current buffer
+- `require("comment-highlights").toggle()`: Toggle comment highlighting for the current buffer
 
 ## 🥂 Credits
 - ... to [@stswed](https://github.com/stsewd) for the [tree-sitter-comment](https://github.com/stsewd/tree-sitter-comment) grammar
