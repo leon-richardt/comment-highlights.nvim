@@ -1,22 +1,57 @@
 local M = {}
 local highlighter = require("vim.treesitter.highlighter")
 
+local BACKDROP_HL_GROUP_NAME = "CommentHighlightsBackdrop"
+local COMMENT_HL_GROUP_NAME = "CommentHighlightsComment"
+
 M.defaults = {
     -- Highlight groups to use for the everything non-comment (`backdrop`) and
     -- the comments (`comment`).
     highlights = {
-        backdrop = "Comment",
-        comment = "Search",
+        backdrop = nil,
+        comment = nil,
     },
     -- Base priority to render highlight groups with. The actual priorities
     -- used by `comment-highlights.nvim` are derived from this value.
     base_priority = 200,
 }
 
+local function get_or_default_hl_group(hl_group, option, default)
+    local function deprecated_highlight_group()
+        local msg = "Configuring highlights directly via `opts.highlights` is deprecated and " ..
+            "the possibility to do so will be removed in a future version. See " ..
+            "https://github.com/leon-richardt/comment-highlights.nvim/issues/5 for more " ..
+            "information and alternatives."
+        vim.notify_once(msg, vim.log.levels.WARN)
+    end
+
+    local function hl_exists()
+        return getmetatable(vim.api.nvim_get_hl(0, { name = hl_group })) ~= vim._empty_dict_mt
+    end
+
+    if option ~= nil then
+        deprecated_highlight_group()
+        vim.api.nvim_set_hl(0, hl_group, {
+            link = option
+        })
+    else
+        -- User has not configured a highlight group in the options. Check if the
+        -- `CommentHighlights` HL group is already defined (e.g. by a theme or the user).
+        if not hl_exists() then
+            -- HL group has not been defined so far. Define it to the default.
+            vim.api.nvim_set_hl(0, hl_group, { link = default })
+        end
+    end
+end
+
 function M.setup(opts)
     opts = opts or {}
 
     M.opts = vim.tbl_deep_extend("force", M.defaults, opts)
+
+    -- Set up highlight groups
+    get_or_default_hl_group(BACKDROP_HL_GROUP_NAME, M.opts.highlights.backdrop, "Comment")
+    get_or_default_hl_group(COMMENT_HL_GROUP_NAME, M.opts.highlights.comment, "Search")
 
     M.state = {
         ns_id = vim.api.nvim_create_namespace("comment-highlights"),
@@ -83,7 +118,7 @@ local function highlight_tree(tree, ltree)
     local root_range = { tree:root():range() }
     for line = root_range[1], root_range[3] do
         vim.api.nvim_buf_set_extmark(0, M.state.ns_id, line, 0, {
-            hl_group = M.opts.highlights.backdrop,
+            hl_group = BACKDROP_HL_GROUP_NAME,
             end_row = line,
             hl_eol = true,
             end_col = 999,
@@ -103,7 +138,7 @@ local function highlight_tree(tree, ltree)
         local range = { node:range(false) }
 
         vim.api.nvim_buf_set_extmark(0, M.state.ns_id, range[1], range[2], {
-            hl_group = M.opts.highlights.comment,
+            hl_group = COMMENT_HL_GROUP_NAME,
             end_row = range[3],
             hl_eol = false,
             end_col = range[4],

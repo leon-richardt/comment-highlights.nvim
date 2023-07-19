@@ -47,19 +47,21 @@ Install with any package manager of your choosing, e.g. [`folke/lazy.nvim`](http
 There are just a few options to configure, with the following defaults:
 ```lua
 {
-    -- Highlight groups to use for the everything non-comment (`backdrop`) and
-    -- the comments (`comment`).
-    highlights = {
-        backdrop = "Comment",
-        comment = "Search",
-    },
     -- Base priority to render highlight groups with. The actual priorities
     -- used by `comment-highlights.nvim` are derived from this value.
     base_priority = 200,
 }
 ```
 
-<details><summary>Example with a custom highlight group</summary>
+### 🎨 Highlight Groups
+The style of the backdrop and comments can be configured using the two highlight groups
+- `CommentHighlightsBackdrop` (linked to the `Comment` highlight group per default) and
+- `CommentHighlightsComment` (linked to the `Search` highlight group per default).
+
+The default value will be used if the respective highlight group is not already defined when the plugin is loaded.
+The groups can be set by the user or a color theme.
+
+<details><summary>Example with custom highlight groups</summary>
 
 ```lua
 {
@@ -73,16 +75,17 @@ There are just a few options to configure, with the following defaults:
             desc = "Toggle comment highlighting"
         },
     },
-    config = function ()
-        vim.api.nvim_set_hl(0, "CommentHighlights", {
-            fg = "#FFFFFF",
-            bg = "#FF0000"
+    config = function()
+        vim.api.nvim_set_hl(0, "CommentHighlightsBackdrop", {
+            bg = "#424242",
+            fg = "#424242",
         })
-        require("comment-highlights").setup({
-            highlights = {
-                comment = "CommentHighlights"
-            }
+        vim.api.nvim_set_hl(0, "CommentHighlightsComment", {
+            bg = "#FFFFFF",
+            fg = "#FF0000",
         })
+
+        require("comment-highlights").setup()
     end,
 },
 ```
