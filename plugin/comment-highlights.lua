@@ -1,3 +1,3 @@
-vim.api.nvim_create_user_command("HCToggle", function ()
-    require("highlight-comments").toggle()
+vim.api.nvim_create_user_command("CHToggle", function ()
+    require("comment-highlights").toggle()
 end, {})

@@ -90,6 +90,7 @@ There are just a few options to configure, with the following defaults:
 </details>
 
 ## 🚀 Usage
+- `:CHToggle`: Toggle comment highlighting for the current buffer
 - `require("comment-highlights").enable()`: Enable comment highlighting for the current buffer
 - `require("comment-highlights").disable()`: Disable comment highlighting for the current buffer
 - `require("comment-highlights").toggle()`: Toggle comment highlighting for the current buffer
