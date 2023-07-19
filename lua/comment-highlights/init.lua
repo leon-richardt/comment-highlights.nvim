@@ -39,7 +39,7 @@ local function redraw_comment_hls(comment_tree)
 
     -- NOTE: Some injected languages may not have highlight queries.
     if not query:query() then
-      return
+        return
     end
 
     local root = comment_tree:root()
@@ -47,28 +47,28 @@ local function redraw_comment_hls(comment_tree)
     local iter = query:query():iter_captures(root, buf_highlighter.bufnr, row_start, row_end + 1)
 
     for capture, node, metadata in iter do
-      local hl = query.hl_cache[capture]
-      local node_range = {node:range()}
+        local hl = query.hl_cache[capture]
+        local node_range = { node:range() }
 
-      if hl then
-        local c = query._query.captures[capture] -- name of the capture in the query
+        if hl then
+            local c = query._query.captures[capture] -- name of the capture in the query
 
-        if c ~= nil then
-            local redraw_prio = nil
-            if metadata.priority ~= nil then
-                redraw_prio = M.state.priorities.redraw_base + metadata.priority
-            end
+            if c ~= nil then
+                local redraw_prio = nil
+                if metadata.priority ~= nil then
+                    redraw_prio = M.state.priorities.redraw_base + metadata.priority
+                end
 
-            vim.api.nvim_buf_set_extmark(0, M.state.ns_id, node_range[1], node_range[2], {
+                vim.api.nvim_buf_set_extmark(0, M.state.ns_id, node_range[1], node_range[2], {
                     hl_group = "@" .. c,
                     end_row = node_range[3],
                     hl_eol = false,
                     end_col = node_range[4],
                     priority = redraw_prio,
                     strict = false,
-            })
+                })
+            end
         end
-      end
     end
 end
 
@@ -80,15 +80,15 @@ local function highlight_tree(tree, ltree)
         return
     end
 
-    local root_range = {tree:root():range()}
+    local root_range = { tree:root():range() }
     for line = root_range[1], root_range[3] do
         vim.api.nvim_buf_set_extmark(0, M.state.ns_id, line, 0, {
-                hl_group = M.opts.highlights.backdrop,
-                end_row = line,
-                hl_eol = true,
-                end_col = 999,
-                priority = M.state.priorities.backdrop,
-                strict = false,
+            hl_group = M.opts.highlights.backdrop,
+            end_row = line,
+            hl_eol = true,
+            end_col = 999,
+            priority = M.state.priorities.backdrop,
+            strict = false,
         })
     end
 
@@ -100,15 +100,15 @@ local function highlight_tree(tree, ltree)
 
     local comments = res
     for _, node, _ in comments:iter_captures(tree:root(), 0) do
-        local range = {node:range(false)}
+        local range = { node:range(false) }
 
         vim.api.nvim_buf_set_extmark(0, M.state.ns_id, range[1], range[2], {
-                hl_group = M.opts.highlights.comment,
-                end_row = range[3],
-                hl_eol = false,
-                end_col = range[4],
-                priority = M.state.priorities.comment,
-                strict = false,
+            hl_group = M.opts.highlights.comment,
+            end_row = range[3],
+            hl_eol = false,
+            end_col = range[4],
+            priority = M.state.priorities.comment,
+            strict = false,
         })
     end
 end
